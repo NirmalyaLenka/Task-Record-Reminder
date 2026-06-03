@@ -141,3 +141,5 @@ Set it to any positive integer (minutes). The change takes effect on the next pa
 ## License
 
 MIT. See `LICENSE` for the full text.
+## contact
+For any queries please contact carmodbhai@gmail.com
