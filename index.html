@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Record & Reminder</title>
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+
+  <header class="taskbar">
+    <div></div>
+    <div class="taskbar-title">Task Record &amp; Reminder</div>
+    <div class="taskbar-actions">
+      <button class="btn-secondary" id="exportBtn" type="button">Export records</button>
+      <button class="btn-secondary" id="clearBtn" type="button">Clear all</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="panel intro">
+        <div>
+          <h1>Plan it. Track it. Finish it.</h1>
+          <p>Add every assigned task with a due date, receive a browser notification 30 minutes before the deadline, and keep a clean record of completed, pending, overdue, and archived work.</p>
+        </div>
+        <div class="notice">
+          <strong>Reminder note:</strong> Notifications work in supported browsers after permission is allowed. Keep this page open for on-time reminders. Your task records are saved privately in this browser using local storage.
+        </div>
+      </div>
+
+      <div class="panel stats" aria-label="Task statistics">
+        <div class="stat"><span>Total tasks</span><strong id="totalCount">0</strong></div>
+        <div class="stat"><span>Completed</span><strong id="completedCount">0</strong></div>
+        <div class="stat"><span>Pending</span><strong id="pendingCount">0</strong></div>
+        <div class="stat"><span>Overdue</span><strong id="overdueCount">0</strong></div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside>
+        <div class="panel">
+          <form id="taskForm">
+            <h2 class="section-title" id="formTitle">Add a new task</h2>
+            <input type="hidden" id="taskId" />
+
+            <label for="taskName">Task name</label>
+            <input id="taskName" type="text" placeholder="Example: Submit project report" required />
+
+            <div class="form-row">
+              <div>
+                <label for="dueDate">Due date</label>
+                <input id="dueDate" type="date" required />
+              </div>
+              <div>
+                <label for="dueTime">Due time</label>
+                <input id="dueTime" type="time" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div>
+                <label for="priority">Priority</label>
+                <select id="priority">
+                  <option value="Low">Low</option>
+                  <option value="Normal" selected>Normal</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+              <div>
+                <label for="assignedBy">Assigned by / source</label>
+                <input id="assignedBy" type="text" placeholder="Self, manager, client..." />
+              </div>
+            </div>
+
+            <label for="taskNote">Notes</label>
+            <textarea id="taskNote" placeholder="Add details, links, checklist, or context..."></textarea>
+
+            <div class="form-actions">
+              <button type="submit" id="saveBtn">Save task</button>
+              <button type="button" class="btn-secondary" id="resetBtn">Reset</button>
+            </div>
+
+            <div class="notification-status" id="notificationStatus"></div>
+          </form>
+        </div>
+
+        <div class="panel side-section" style="margin-top: 20px;">
+          <h2 class="section-title">Activity record</h2>
+          <div class="log-list" id="activityLog"></div>
+        </div>
+      </aside>
+
+      <section class="panel content-panel">
+        <div class="toolbar">
+          <div class="filters" aria-label="Task filters">
+            <button class="filter-btn active" data-filter="all" type="button">All</button>
+            <button class="filter-btn" data-filter="pending" type="button">Pending</button>
+            <button class="filter-btn" data-filter="completed" type="button">Completed</button>
+            <button class="filter-btn" data-filter="overdue" type="button">Overdue</button>
+            <button class="filter-btn" data-filter="archived" type="button">Archived</button>
+          </div>
+          <div class="tools-right">
+            <label class="sr-only" for="sortOrder">Sort by importance</label>
+            <select class="sort-box" id="sortOrder" aria-label="Sort tasks by importance">
+              <option value="lowHigh">Importance: Less to More</option>
+              <option value="highLow">Importance: More to Less</option>
+              <option value="due">Due date first</option>
+            </select>
+            <input class="search-box" id="searchInput" type="search" placeholder="Search tasks..." />
+          </div>
+        </div>
+        <div class="task-list" id="taskList"></div>
+      </section>
+    </section>
+
+    <section class="panel support" id="support">
+      <div>
+        <h2>Bug report or improvement idea?</h2>
+        <p>If something is not working or you want to suggest a better feature, open an issue on the GitHub repository.</p>
+      </div>
+      <a class="mail-link" href="https://github.com/NirmalyaLenka/task-record-reminder/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="src/app.js"></script>
+</body>
+</html>
