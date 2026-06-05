@@ -1,5 +1,5 @@
 # Task-Record-Reminder
-A lightweight, browser-based task manager that lives entirely in a single HTML page. No server, no database, no account — open the file and start working.
+A lightweight, browser-based task manager that lives entirely in a single HTML page. No server, no database, no account open the file and start working.
 
 Tasks are saved in your browser's local storage and stay there between sessions. A reminder fires as a browser notification 30 minutes before each task's deadline, as long as the page remains open.
 
