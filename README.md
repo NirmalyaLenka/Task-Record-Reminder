@@ -147,6 +147,16 @@ For any queries please contact carmodbhai@gmail.com
 
 ---
 
+## Skills & technologies
+
+`JavaScript` · `HTML/CSS`
+
+
+## How it works
+
+Start with the main source files listed in the repository structure. Review project configuration and dependencies before building or running the code.
+
+
 ## Maintenance & Audit
 
 - **Audit date:** 10 November 2026
