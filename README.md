@@ -1,166 +1,62 @@
-# Task-Record-Reminder
-A lightweight, browser based task manager that lives entirely in a single HTML page. No server, no database, no account open the file and start working.
+# Task Record & Reminder
 
-Tasks are saved in your browser's local storage and stay there between sessions. A reminder fires as a browser notification 30 minutes before each task's deadline, as long as the page remains open.
+A single-page task manager written in HTML, CSS, and vanilla JavaScript. The intended features are task creation and editing, deadlines, priorities, status filters, search/sorting, an activity log, JSON export, and browser notifications 30 minutes before due times.
 
----
+## Important: current file-path blocker
 
-## What it does
+The checked-in `index.html` references `src/styles.css` and `src/app.js`, but the tracked files are at the repository root as `styles.css` and `app.js`. The referenced `src/` files were not found during this review. As committed, the page therefore cannot load its stylesheet and application logic from those paths. **Do not assume the app is working until this path mismatch is corrected.** The application files were left unchanged as required.
 
-- Add tasks with a name, due date and time, priority level, and an optional note
-- Receive a browser notification 30 minutes before each deadline
-- View tasks filtered by status  all, pending, completed, overdue, or archived
-- Search tasks by name, note, priority, or assigned source
-- Sort tasks by importance (low to high, high to low) or by due date
-- Mark tasks as done, reopen them, edit, archive, or restore them
-- See a running activity log of every action taken
-- Export all tasks and log entries as a JSON file for safekeeping
-- Clear everything with a single confirmation step
+## Files
 
----
+| Path | Purpose |
+|---|---|
+| `index.html` | Page markup and controls; currently references missing `src/` asset paths |
+| `styles.css` | Stylesheet present at the repository root |
+| `app.js` | Application logic present at the repository root |
+| `LICENSE` | MIT license |
+| `README.md` | Setup notes, limitations, and maintenance record |
 
-## Project structure
+## Run and inspect
 
-```
-task-record-reminder/
-  index.html          Main page — markup and page structure only
-  src/
-    styles.css        All visual styles — layout, components, responsive rules
-    app.js            All application logic — storage, rendering, events, notifications
-  docs/
-    INSTRUCTIONS.docx Setup and usage guide in Word format
-  .gitignore          Files excluded from version control
-  LICENSE             MIT license
-  README.md           This file
-```
+There is no package manifest, build step, or third-party JavaScript dependency. The path mismatch above must be fixed in a future code change before the app can run as intended. Once the HTML references point to the tracked root files, start a local server from the repository root:
 
-Each file has a single, clear responsibility. The HTML contains no inline styles or scripts. The CSS has no JavaScript. The JavaScript has no embedded HTML strings beyond what is strictly necessary to render dynamic rows.
-
----
-
-## How to run
-
-No build step is required. Open `index.html` directly in a web browser.
-
-**Option 1 — File open (quickest)**
-
-Double-click `index.html` or drag it into any modern browser window. The app loads immediately.
-
-**Option 2 — Local server (recommended for development)**
-
-If you want to avoid any browser restrictions on file:// URLs, serve the folder with a simple HTTP server:
-
-Using Python:
-```
+```bash
 python -m http.server 8080
 ```
 
-Using Node.js (with the npx serve package):
-```
-npx serve .
-```
+Then open `http://localhost:8080` in a modern browser. Use the browser developer tools' Network/Console panels to check that `styles.css` and `app.js` load successfully. Opening `index.html` directly does not resolve the current missing paths.
 
-Then open `http://localhost:8080` in your browser.
+## Data and reminders
 
----
+- Tasks and activity entries are stored in this browser's `localStorage` under `minimalTaskReminder.tasks.v1` and `minimalTaskReminder.logs.v1`.
+- Use **Export records** to save a JSON backup before clearing browser data or using **Clear all**.
+- The reminder window is configured in `app.js` as `REMINDER_MINUTES = 30`.
+- The script checks deadlines on page load and every 30 seconds. Keep the page open; browser throttling, sleep, or closed tabs can delay or prevent reminders. This is not a reliable background alarm service.
+- Browser notifications require support and permission from the user. Denied permission prevents notification delivery.
+- Records are local to the browser profile; they are not synced to a server or another device.
 
-## Browser compatibility
+## First-run checklist
 
-The app uses standard, widely supported web APIs:
+1. Resolve the HTML-to-file path mismatch before evaluating the app.
+2. Run it only in a browser profile where you are comfortable storing task details locally.
+3. Grant notification permission only if you want browser reminders.
+4. Create a test task with a near-future due time and confirm behavior manually; no runtime test was performed during this documentation review.
+5. Export records before using **Clear all** or clearing site data.
 
-- `localStorage` for persistence
-- `Notification` API for reminders
-- `Intl.DateTimeFormat` for locale-aware date display
-- `Blob` and `URL.createObjectURL` for JSON export
+## Browser APIs and implementation
 
-Any modern browser released after 2018 will work without issues. Notifications require the user to grant permission when prompted.
+The source uses `localStorage`, the Notifications API, `Intl.DateTimeFormat`, and browser Blob/URL APIs for JSON export. No backend is present in the reviewed files. The application logic is in `app.js`; the page markup is in `index.html`; visual styling is in `styles.css`.
 
----
+## License and verification
 
-## Local storage keys
-
-| Key | Contents |
-|---|---|
-| `minimalTaskReminder.tasks.v1` | Array of all task objects |
-| `minimalTaskReminder.logs.v1` | Array of activity log entries |
-
-Data never leaves the browser. No network requests are made by the application itself.
+The repository includes an MIT `LICENSE`. The source and markup were inspected, but no browser test was run. The known asset-path mismatch remains unresolved because this maintenance pass is limited to documentation and safe organization changes.
 
 ---
-
-## Task data shape
-
-Each task object stored in local storage has this structure:
-
-```json
-{
-  "id":          "unique string",
-  "name":        "Task name",
-  "dueAt":       "2025-06-10T14:00:00.000Z",
-  "priority":    "Low | Normal | High",
-  "assignedBy":  "optional source label",
-  "note":        "optional free text",
-  "status":      "pending | completed | archived",
-  "createdAt":   "ISO timestamp",
-  "updatedAt":   "ISO timestamp or null",
-  "completedAt": "ISO timestamp or null",
-  "archivedAt":  "ISO timestamp or null",
-  "remindedAt":  "ISO timestamp or null"
-}
-```
-
----
-
-## Exported JSON format
-
-Clicking "Export records" downloads a file named `task-records-YYYY-MM-DD.json` with this shape:
-
-```json
-{
-  "exportedAt":      "ISO timestamp",
-  "reminderMinutes": 30,
-  "tasks":           [...],
-  "activityLog":     [...]
-}
-```
-
----
-
-## Customising the reminder window
-
-The reminder fires 30 minutes before each due time by default. To change this, open `src/app.js` and edit line 14:
-
-```js
-const REMINDER_MINUTES = 30;
-```
-
-Set it to any positive integer (minutes). The change takes effect on the next page load.
-
----
-
-## License
-
-MIT. See `LICENSE` for the full text.
-## contact
-For any queries please contact carmodbhai@gmail.com
-
-
----
-
-## Skills & technologies
-
-`JavaScript` · `HTML/CSS`
-
-
-## How it works
-
-Start with the main source files listed in the repository structure. Review project configuration and dependencies before building or running the code.
-
 
 ## Maintenance & Audit
 
 - **Audit date:** 11 November 2026
 - **Documentation status:** README reviewed and audit record added on this date.
-- **Scope and evidence:** This is a documentation-level maintenance pass. It does not establish that source code compiles, dependencies are current, security has been tested, or hardware/runtime behavior has been verified.
-- **Code and tests:** No new functional code changes or test results are claimed by this README update. Run project-specific build, test, and hardware/runtime checks before relying on the project.
-- **Maintenance baseline:** Documentation status recorded through 11 November 2026; revisit setup instructions, dependencies, known limitations, and tests when the project changes.
+- **Scope and evidence:** Documentation review of `index.html`, `app.js`, `styles.css`, and the existing README. The missing `src/styles.css` and `src/app.js` references were confirmed; this does not establish successful runtime behavior.
+- **Code and tests:** No application code was changed and no browser or notification test was performed.
+- **Maintenance baseline:** Documentation status recorded through 11 November 2026; revisit the file-path mismatch, notification timing, local-storage behavior, and export flow after code changes.
