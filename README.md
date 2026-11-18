@@ -55,8 +55,8 @@ The repository includes an MIT `LICENSE`. The source and markup were inspected, 
 
 ## Maintenance & Audit
 
-- **Audit date:** 11 November 2026
-- **Documentation status:** README reviewed and audit record added on this date.
+- **Audit date:** 18 November 2026
+- **Documentation status:** README reviewed and audit record updated on this date.
 - **Scope and evidence:** Documentation review of `index.html`, `app.js`, `styles.css`, and the existing README. The missing `src/styles.css` and `src/app.js` references were confirmed; this does not establish successful runtime behavior.
 - **Code and tests:** No application code was changed and no browser or notification test was performed.
-- **Maintenance baseline:** Documentation status recorded through 11 November 2026; revisit the file-path mismatch, notification timing, local-storage behavior, and export flow after code changes.
+- **Maintenance baseline:** Documentation status recorded through 18 November 2026; revisit the file-path mismatch, notification timing, local-storage behavior, and export flow after code changes.
